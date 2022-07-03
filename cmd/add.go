@@ -22,7 +22,13 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		addInt(args)
+		fstatus, _ := cmd.Flags().GetBool("float")
+
+		if fstatus {
+			addFloat(args)
+		} else {
+			addInt(args)
+		}
 	},
 }
 
@@ -53,4 +59,19 @@ func addInt(args []string) {
 	}
 
 	fmt.Printf("Addition of number %s is %d", args, sum)
+}
+
+func addFloat(args []string) {
+	var sum float64
+
+	for _, fval := range args {
+		ftemp, err := strconv.ParseFloat(fval, 64)
+
+		if err != nil {
+			fmt.Println(err)
+		}
+		sum = sum + ftemp
+	}
+
+	fmt.Printf("Sum of floating numbers %s is %f", args, sum)
 }
