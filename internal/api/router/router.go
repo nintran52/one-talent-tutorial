@@ -8,6 +8,7 @@ import (
 
 func Init(s *api.Server) {
 	s.Echo = echo.New()
+	s.Echo.HideBanner = true
 
 	s.Router = &api.Router{
 		Routes:    nil,

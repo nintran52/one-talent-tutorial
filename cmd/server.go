@@ -5,12 +5,18 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"context"
 	"errors"
-	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/nintran52/one-talent-tutorial/internal/api"
 	"github.com/nintran52/one-talent-tutorial/internal/api/router"
+	"github.com/nintran52/one-talent-tutorial/internal/config"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 )
@@ -26,7 +32,6 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("server called")
 		runServer()
 	},
 }
@@ -46,8 +51,21 @@ func init() {
 }
 
 func runServer() {
-	s := api.NewServer()
+	config := config.DefaultServerConfigFromEnv()
+
+	zerolog.TimeFieldFormat = time.RFC3339Nano
+
+	s := api.NewServer(config)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	if err := s.InitDB(ctx); err != nil {
+		cancel()
+		log.Fatal().Err(err).Msg("Failed to  initialize database")
+	}
+	cancel()
+
 	router.Init(s)
+
 	go func() {
 		if err := s.Start(); err != nil {
 			if errors.Is(err, http.ErrServerClosed) {
@@ -57,4 +75,8 @@ func runServer() {
 			}
 		}
 	}()
+
+	quick := make(chan os.Signal, 1)
+	signal.Notify(quick, os.Interrupt, syscall.SIGTERM)
+	<-quick
 }
