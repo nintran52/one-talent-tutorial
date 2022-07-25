@@ -2,10 +2,15 @@ package config
 
 import (
 	"fmt"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/nintran52/one-talent-tutorial/internal/util"
 )
+
+var DatabaseMigrationFolder = filepath.Join(util.GetProjectRootDir(), "/migrations")
 
 type Database struct {
 	Host             string

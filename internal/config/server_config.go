@@ -8,7 +8,29 @@ import (
 )
 
 type EchoServer struct {
-	ListenAddress string
+	ListenAddress                 string
+	EnableCORSMiddleware          bool
+	EnableLoggerMiddleware        bool
+	EnableRecoverMiddleware       bool
+	EnableRequestIDMiddleware     bool
+	EnableTrailingSlashMiddleware bool
+	EnableSecureMiddleware        bool
+	EnableCacheControlMiddleware  bool
+	SecureMiddleware              EchoServerSecureMiddleware
+}
+
+// EchoServerSecureMiddleware represents a subset of echo's secure middleware config relevant to the app server.
+// https://github.com/labstack/echo/blob/master/middleware/secure.go
+type EchoServerSecureMiddleware struct {
+	XSSProtection         string
+	ContentTypeNosniff    string
+	XFrameOptions         string
+	HSTSMaxAge            int
+	HSTSExcludeSubdomains bool
+	ContentSecurityPolicy string
+	CSPReportOnly         bool
+	HSTSPreloadEnabled    bool
+	ReferrerPolicy        string
 }
 
 type Server struct {
@@ -20,7 +42,7 @@ func DefaultServerConfigFromEnv() Server {
 	return Server{
 		Database: Database{
 			Host:     util.GetEnv("PGHOST", "localhost"),
-			Port:     util.GetEnvAsInt("PGPORT", 5432),
+			Port:     util.GetEnvAsInt("PGPORT", 5433),
 			Username: util.GetEnv("PGUSER", "dbuser"),
 			Password: util.GetEnv("PGPASSWORD", " dbpass"),
 			Database: util.GetEnv("PGDATABASE", "development"),
