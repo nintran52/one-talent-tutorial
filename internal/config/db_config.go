@@ -10,6 +10,8 @@ import (
 	"github.com/nintran52/one-talent-tutorial/internal/util"
 )
 
+const DatabaseMigrationTable = "migrations"
+
 var DatabaseMigrationFolder = filepath.Join(util.GetProjectRootDir(), "/migrations")
 
 type Database struct {
