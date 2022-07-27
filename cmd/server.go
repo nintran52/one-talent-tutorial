@@ -51,7 +51,7 @@ func init() {
 }
 
 func runServer() {
-	config := config.DefaultServerConfigFromEnv()
+	config := config.DefaultServiceConfigFromEnv()
 
 	zerolog.TimeFieldFormat = time.RFC3339Nano
 

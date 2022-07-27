@@ -38,7 +38,7 @@ type Server struct {
 	Database Database
 }
 
-func DefaultServerConfigFromEnv() Server {
+func DefaultServiceConfigFromEnv() Server {
 	return Server{
 		Database: Database{
 			Host:     util.GetEnv("PGHOST", "localhost"),

@@ -1,0 +1,5 @@
+development:
+  dialect: postgres
+  datasource: host=localhost port=5433 user=dbuser password=dbpass sslmode=disable dbname=development
+  dir: migrations
+  table: migrations

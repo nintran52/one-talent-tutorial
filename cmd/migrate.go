@@ -46,7 +46,7 @@ func migrateCmdFunc(cmd *cobra.Command, args []string) {
 
 func applyMigrations() (int, error) {
 	ctx := context.Background()
-	serviceConfig := config.DefaultServerConfigFromEnv()
+	serviceConfig := config.DefaultServiceConfigFromEnv()
 	db, err := sql.Open("postgres", serviceConfig.Database.ConnectionString())
 	if err != nil {
 		return 0, err
